@@ -9,11 +9,6 @@ const { response } = require('express');
 // Basic Configuration
 const port = process.env.PORT || 3000;
 
-//Database Connection
-mongoose.connect(process.env.MONGO_URI, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true
-})
 
 app.use(cors());
 app.use('/public', express.static(`${process.cwd()}/public`));
@@ -21,6 +16,12 @@ app.use('/public', express.static(`${process.cwd()}/public`));
 app.get('/', function(req, res) {
     res.sendFile(process.cwd() + '/views/index.html');
 });
+
+//Database Connection and modelling.
+mongoose.connect(process.env.MONGO_URI, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true
+})
 
 let urlSchema = new mongoose.Schema({
     //original url
@@ -76,8 +77,6 @@ app.get("/api/shorturl/:number", (req, res) => {
         }
     })
 })
-
-
 
 app.listen(port, function() {
     console.log(`Listening on port ${port}`);
