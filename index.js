@@ -9,7 +9,6 @@ const { response } = require('express');
 // Basic Configuration
 const port = process.env.PORT || 3000;
 
-
 app.use(cors());
 app.use('/public', express.static(`${process.cwd()}/public`));
 
@@ -17,7 +16,7 @@ app.get('/', function(req, res) {
     res.sendFile(process.cwd() + '/views/index.html');
 });
 
-//Database Connection and modelling.
+//Database Connection and Modelling.
 mongoose.connect(process.env.MONGO_URI, {
     useUnifiedTopology: true,
     useNewUrlParser: true
@@ -33,10 +32,9 @@ let urlSchema = new mongoose.Schema({
 let Url = mongoose.model("Url", urlSchema)
 let resObj = {}
 
-
-
 app.post("/api/shorturl", bodyParser.urlencoded({ extended: false }), (req, res) => {
     let inputUrl = req.body["url"]
+        //Check, if the URL is valid or not using regex.
     let regUrl = new RegExp(/^[http://www.]/gi)
     if (!inputUrl.match(regUrl)) {
         res.json({ error: "invalid url" })
@@ -46,7 +44,6 @@ app.post("/api/shorturl", bodyParser.urlencoded({ extended: false }), (req, res)
     resObj["original_url"] = inputUrl
 
     let inputShort = 1
-
 
     Url.findOne({})
         .sort({ short: "desc" })
